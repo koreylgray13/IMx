@@ -1,0 +1,18 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: win-64
+asgiref==3.7.2
+django
+django-simple-history
+et-xmlfile
+gunicorn
+numpy
+openpyxl
+packaging
+pandas
+python-dateutil
+pytz
+setuptools
+six
+python-dotenv
+psycopg2

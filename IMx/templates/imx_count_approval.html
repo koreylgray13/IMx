@@ -1,0 +1,115 @@
+{% extends 'imx_base.html' %}
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+<a href="{% url 'review_counts' %}" class="btn btn-outline-secondary my-3 mx-4" >Go Back</a>
+
+<!-- Screen Title -->
+<br/>
+<div class="text-center"> 
+  <h1>
+      Count Approval
+  </h1>
+</div>
+<br/><br/>
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <span></span>
+        
+        <div>
+            <!-- Review (Checkmark) Button -->
+            <a class="btn btn-success" href="{% url 'approve_count' count_record.id %}" id="completeButton">
+                <i class="fas fa-check"></i> Complete
+            </a>
+            <!-- Reject (X) Button -->
+            <a class="btn btn-danger" href="{% url 'initiate_recount' count_record.id %}" id="recountButton">
+                <i class="fas fa-times"></i> Recount
+            </a>
+        </div>
+        
+        <script>
+            // Get the status from your Django variable and assign it to a JavaScript variable
+            var status = "{{ count_record.status }}";
+        
+            // Get the button elements
+            var completeButton = document.getElementById("completeButton");
+            var recountButton = document.getElementById("recountButton");
+        
+            // Check the status and disable buttons accordingly
+            if (status === 'Completed') {
+            completeButton.classList.add("disabled");
+            completeButton.removeAttribute("disabled");
+            } else if (status === 'Pending Count') {
+                recountButton.classList.add("disabled");
+            }
+        </script>
+    </div>
+    <br/>
+    
+    <!-- Count Tag -->
+    <div class="card">
+        <div class="card-header">
+          <strong>{{ count_record.tag }}</strong>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"><b> Item: </b>{{ count_record.name }}<br/></h5>
+          <p class="card-text"><b> Subinventory: </b>{{ count_record.subinv }}<br/></p>
+          <p class="card-text"><b> Location: </b>{{ count_record.location }}<br/></p>
+          <p class="card-text"><b> UOM: </b>{{ count_record.uom }}<br/></p>
+          <p class="card-text"><b> Quantity: </b>{{ count_record.quantity }}<br/></p>
+          <p class="card-text"><b> Status: </b>{{ count_record.status }}<br/></p>
+          <p class="card-text"><b> First Count: </b>{{ count_record.first_count }}<br/></p>
+          <p class="card-text"><b> Second Count: </b>{{ count_record.second_count }}<br/></p>
+          <p class="card-text"><b> Third Count: </b>{{ count_record.third_count }}<br/></p>
+        </div>
+      </div>
+    <br/><br/>
+    
+    
+    <div class="table-responsive">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <table class="table table-striped-columns table-hover table-bordered table-sm">
+            <thead>
+            <tr>
+                <!-- <th scope="col">#</th> -->
+                <th scope="col">Tag</th>
+                <th scope="col">Item Name</th>
+                <th scope="col">Subinventory</th>
+                <th scope="col">Location</th>
+                <th scope="col">UOM</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Last Modifed By</th>
+                <th scope="col">Last Modifed</th>
+    
+                <th scope="col">Status</th>
+    
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% if count_history %}
+                    {% for count in count_history %}
+                        <tr>
+                            <td>{{count.tag}}</td>
+                            <td>{{ count.name }}</td>
+                            <td>{{ count.subinv }}</td>
+                            <td>{{ count.location }}</td>
+                            <td>{{ count.uom }}</td>
+                            <td>{{ count.quantity }}</td>
+                            <td>{{ count.modified_by }}</td>
+                            <td>{{ count.last_modified }}</td>
+    
+                            <td>{{ count.status }}</td>
+    
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}

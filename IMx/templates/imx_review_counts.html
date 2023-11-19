@@ -1,0 +1,116 @@
+{% extends 'imx_base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+{% load static %}
+    <a href="{% url 'view_counting' %}" class="btn btn-outline-secondary my-3 mx-4" >Go Back</a>
+
+    <div class="container">
+        <div class="text-center">
+            <h1> Inventory Counts </h1>
+        </div>
+        
+        <br/>
+    
+        <!-- HTML template with an export button -->
+        <button id="all">All</button>
+        <button id="pending_count">Pending Count</button>
+        <button id="pending_review">Pending Review</button>
+        <button id="completed">Completed</button>
+
+        <button id="export-button">Export Data</button>
+
+
+        <script>
+            document.querySelectorAll('button').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const filter = button.id;
+                    const url = `/IMx/counting/review_counts/${filter}/`;
+                    window.location.href = url;
+                });
+            });
+        </script>
+    
+        <br/><br/>
+        
+        <div class="table-responsive">
+            <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+            <table class="table table-striped-columns table-hover table-bordered table-sm">
+                <thead>
+                <tr>
+                    <!-- <th scope="col">#</th> -->
+                    <th scope="col">Tag</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Subinventory</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">UOM</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Count #1</th>
+                    <th scope="col">Count #2</th>
+                    <th scope="col">Count #3</th>
+
+                </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {% if counts %}
+                        {% for count in counts %}
+                            <tr>
+                                <td><a href="{% url 'count_approval' count.id %}"> {{count.tag}} </a></td>
+                                <td>{{ count.name }}</td>
+                                <td>{{ count.subinv }}</td>
+                                <td>{{ count.location }}</td>
+                                <td>{{ count.uom }}</td>
+                                <td>{{ count.quantity }}</td>
+                                <td>{{ count.status }}</td>
+                                <td>{{ count.first_count }}</td>
+                                <td>{{ count.second_count }}</td>
+                                <td>{{ count.third_count }}</td>
+
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+    
+        {% else %}
+        <h1>Login</h1>
+        <br/>
+        <form method="post" action="{% url 'home' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" class="form-control" name="username" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">Login</button>
+        </form>
+    </div>
+
+
+<!-- JavaScript for handling the export -->
+<script>
+document.getElementById("export-button").addEventListener("click", function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/IMx/counting/export_data/", true);  // Provide the correct URL here
+    xhr.responseType = "blob";
+
+    xhr.onload = function() {
+        if (this.status === 200) {
+            var blob = this.response;
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "exported_data.csv";
+            link.click();
+        }
+    };
+
+    xhr.send();
+});
+</script>
+    
+    
+    {% endif %}
+{% endblock %}

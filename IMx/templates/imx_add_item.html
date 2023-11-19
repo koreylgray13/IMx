@@ -1,0 +1,47 @@
+{% extends 'imx_base.html' %}
+
+{% block content %}
+{% csrf_token %}
+<div class="col-md-6 offset-md-3">
+    <br/>
+    {% if user.is_authenticated %}
+   
+    <div class="text-center"> <!-- Center the "Functions" label -->
+        <h1>
+            Generate Counts
+        </h1>
+        <br/>
+        
+        <!-- <button type="submit" class="btn btn-secondary" disabled> Upload File</button> -->
+        <form method="post" enctype="multipart/form-data" action="{% url 'generate_counts' %}">
+            {% csrf_token %}
+            {{ form_upload.as_p }}
+
+
+            <button type="submit" class="btn btn-primary"> Upload </button>
+        </form>
+
+
+
+        <br/>
+        <br/>
+        <h3><strong>OR</strong> </h3>
+        <br/>
+        <br/>
+        <h2> Add Manually </h2>
+
+        <br/>
+        <form method="post" action="{% url 'generate_counts' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+
+            <button type="submit" class="btn btn-primary"> Generate </button>
+        </form>
+
+    </div>
+    {% else %}
+    
+    {% endif %}
+</div>
+{% endblock %}

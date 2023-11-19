@@ -1,2 +1,1 @@
-# IMx
-Basic Inventory Management System
+# Bolt-ERP

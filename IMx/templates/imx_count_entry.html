@@ -1,0 +1,83 @@
+{% extends 'imx_base.html' %}
+{% block content %}
+{% load static %}
+
+<!-- Screen Title -->
+<a href="{% url 'view_counting' %}" class="btn btn-outline-secondary my-3 mx-4" >Go Back</a>
+<div class="text-center"> 
+  <h1>
+      Enter Counts
+  </h1>
+</div>
+<br/><br/>
+
+<div class="container">
+  <!-- Top Buttons -->
+<div class="d-flex justify-content-between">
+  <span></span>
+  <div>
+    <a href="{% if previous_count %}{% url 'count_detail' pk=previous_count.pk %}{% endif %}" class="btn btn-dark{% if not previous_count %} disabled{% endif %}">&lt;</a>
+    <a href="{% if next_count %}{% url 'count_detail' pk=next_count.pk %}{% endif %}" class="btn btn-dark{% if not next_count %} disabled{% endif %}">&gt;</a>
+</div>
+</div>
+<br/>
+
+<!-- Count Tag -->
+<div class="card">
+    <div class="card-header">
+      <strong>{{ count.tag }}</strong>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title"><b> Item: </b>{{ count.name }}<br/></h5>
+      <p class="card-text"><b> Subinventory: </b>{{ count.subinv }}<br/></p>
+      <p class="card-text"><b> Location: </b>{{ count.location }}<br/></p>
+      <p class="card-text"><b> UOM: </b>{{ count.uom }}<br/></p>
+      <p class="card-text"><b> Quantity: </b>{{ count.quantity }}<br/></p>
+      <p class="card-text"><b> Status: </b>{{ count.status }}<br/></p>
+    </div>
+  </div>
+<br/><br/>
+
+<!-- Add Count Form -->
+  <form id="count_entry_form" method="post" action="" class="text-center">
+    {% csrf_token %}
+    <div>
+      Verify Location
+    </div>
+    <div class="form-group">
+        {{ count_entry_form.location }}
+    </div>
+    <br/>
+    <div>
+      Enter Count
+    </div>
+    <div class="form-group">
+        {{ count_entry_form.value }}
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+
+<!-- Script For Toggling Count Field -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationField = document.getElementById('id_location');
+        const valueField = document.getElementById('id_value');
+
+        valueField.setAttribute('disabled', true);  // Disable by default
+
+        locationField.addEventListener('input', function () {
+            const locationValue = locationField.value;
+            if (locationValue === "{{ count.location }}") {
+                valueField.removeAttribute('disabled');
+            } else {
+                valueField.setAttribute('disabled', true);
+                valueField.value = ''; // Clear the value if location doesn't match
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

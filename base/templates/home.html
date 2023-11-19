@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="col-md-6 offset-md-3">
+    
+    <br/>
+    {% if user.is_authenticated %}
+    <div class="text-center">
+        
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <div class="image-wrapper">
+
+        
+            {% if 'Inventory Control' in user.groups.all|join:", " %}
+            <a href="{% url 'imx_home' %}">
+                <img src="{% static 'img/IMx.png' %}" alt="IMx">
+            </a>
+            {% else %}
+            <a href="javascript:void(0);" onclick="showError()">
+                <img src="{% static 'img/IMx.png' %}" alt="IMx">
+            </a>
+            {% endif %}
+            {% if 'Manufacturing' in user.groups.all|join:", " %}
+            <a href="{% url 'wmx_home' %}">
+                <img src="{% static 'img/WMx.png' %}" alt="WMx">
+            </a>
+            {% else %}
+            <a href="javascript:void(0);" onclick="showError()">
+                <img src="{% static 'img/WMx.png' %}" alt="WMx">
+            </a>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script>
+        function showError() {
+            alert("You do not have access to this action.");
+        }
+    </script>
+    {% else %}
+        <h1>Login</h1>
+        <br/>
+        <form method="post" action="{% url 'home' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" class="form-control" name="username" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-secondary">Login</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

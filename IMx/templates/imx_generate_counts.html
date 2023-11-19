@@ -1,0 +1,39 @@
+{% extends 'imx_base.html' %}
+
+{% block content %}
+{% csrf_token %}
+<a href="{% url 'view_counting' %}" class="btn btn-outline-secondary my-3 mx-4" >Go Back</a>
+
+<div class="col-md-6 offset-md-3">
+    {% if user.is_authenticated %}
+    <div class="text-center">
+        <h1>Generate Counts</h1>
+        <br/>
+
+
+<!-- Upload Excel File Form -->
+<form method="post" enctype="multipart/form-data" action="{% url 'generate_counts' %}">
+    {% csrf_token %}
+    {{ form_upload.as_p }}
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+        <br/>
+
+        <!-- ... other HTML content ... -->
+
+        <h2> Add Manually </h2>
+
+        <br/>
+        <form method="post" action="{% url 'generate_counts' %}">
+            {% csrf_token %}
+            {{ form_manual.as_p }}
+            <button type="submit" class="btn btn-primary"> Generate </button>
+        </form>
+
+    </div>
+    {% else %}
+    <!-- Handle the case when the user is not authenticated -->
+    {% endif %}
+</div>
+{% endblock %}
