@@ -16,7 +16,7 @@ This demo walks through the complete process of generating and entering physical
 
 ## Live Demo
 
-You can access a live demo of the application by following this link: [Live Demo](https://example.com)
+You can access a live demo of the application by following this link: [Live Demo](https://web-production-bfb5.up.railway.app)
 
 ### Demo Credentials
 

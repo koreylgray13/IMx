@@ -8,7 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-2=t^hddum)mx$*#%5(#%_*vxapc39!z!r!lb12bqrf$ka##+c@"
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["web-production-bfb5.up.railway.app", "localhost"]
 CSRF_TRUSTED_ORIGINS=["https://web-production-bfb5.up.railway.app"]
